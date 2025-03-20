@@ -18,3 +18,8 @@ async def get_data():
     """Fetches data from an external API and returns it."""
     data = await get_response("query")
     return {"message": "Data retrieved successfully", "data": data}
+
+
+@router.post("/prompt")
+async def process_prompt(post: str):
+    return {"message": f"Hello {name}"}

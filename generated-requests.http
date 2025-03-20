@@ -1,0 +1,9 @@
+###
+POST http://localhost:8000/prompt
+Content-Type: application/json
+
+{
+  "query": "What is the best investment strategy?"
+}
+
+<> 2025-03-20T081713.422.json
