@@ -25,14 +25,14 @@ class Widget:
             data = json.loads(trimmed_answers)
 
         # Create and return the NewsContent object
-        self.content =  NewsContent(headlines=data)
+        self.content = NewsContent(headlines=data)
 
     def generate_kpi_content(self, data, question):
         prompt = 'Given this pandas DataFrame extract the first row and format it as JSON in the structure: { "type": "kpi", "content": { "title": <title>, "company": <company>, "value": <value>, "unit": <unit> } }.\nExtract suitable data in order to answer the following question:'
         answer = convert_results(prompt + question + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
-        kpi_content = [KpiContent(**item) for item in content["data"]]
+        kpi_content = KpiContent(**content)
         self.content = kpi_content
 
     def generate_timeseries_content(self, data, question):
@@ -40,7 +40,7 @@ class Widget:
         answer = convert_results(prompt + question + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
-        time_series_content = [TimeseriesContent(**item) for item in content["data"]]
+        time_series_content = TimeseriesContent(**content)
         self.content = time_series_content
 
     def generate_customer_content(self, user_details):

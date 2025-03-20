@@ -1,7 +1,6 @@
 import openai
 
 api_key = ""
-
 def split_queries(prompt, model="gpt-4"):
     client = openai.OpenAI(api_key=api_key)
 
@@ -59,7 +58,6 @@ def convert_results(prompt, model="gpt-4"):
 
 
 def ask_chat_gpt_for_news(prompt, model="gpt-4"):
-    api_key = ""
     client = openai.OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
@@ -79,6 +77,5 @@ def ask_chat_gpt_for_news(prompt, model="gpt-4"):
         temperature=0.2,
         max_tokens=100,
     )
-
 
     return response.choices[0].message.content.strip()
