@@ -3,7 +3,8 @@ POST http://localhost:8000/prompt
 Content-Type: application/json
 
 {
-  "query": "Why is did my portfolio go down last week?"
+  "query": "Why is did my portfolio go down last week?",
+  "user_id": 1
 }
 
 <> 2025-03-20T081713.422.json
