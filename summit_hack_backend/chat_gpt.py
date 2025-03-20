@@ -35,7 +35,7 @@ def ask_chat_gpt(prompt, model="gpt-4"):
                 ]
         """},
                   {"role": "user", "content": prompt}],
-        temperature=0.7,
+        temperature=0.2,
         max_tokens=200,
     )
 

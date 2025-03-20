@@ -51,11 +51,21 @@ for message in data['messages']:
     except Exception as e:
         print(e)
 
-# markt kapitalisierung
-# price to earnings
-# earnings to share
-# dividend yield
-# performance
-# volatility
-# sharpe ratio
-# beta
+
+def get_cleaned_queries(prompt: str, userId: int) -> list[Prompt]:
+    crm = UserCRMInfo(user_file="../data.csv", stock_file="../CSV_Users.csv")
+    user_personal_info = crm.get_user_details(userId)
+    user_stock_info = crm.get_user_stocks(userId)
+    assembled_prompt = prompt + user_personal_info + user_stock_info
+    json_response = ask_chat_gpt(assembled_prompt)
+    prompts = extract_queries_from_json(json_response)
+    return prompts
+
+
+def extract_queries_from_json(json_string: str) -> list[Prompt]:
+    prompt_list = [Prompt(**item) for item in json.loads(json_string)]
+    return prompt_list
+
+prompts = get_cleaned_queries("Why is my protfolio performing bad", 1)
+for prompt in prompts:
+    print()
