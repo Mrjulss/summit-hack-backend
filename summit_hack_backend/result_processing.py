@@ -27,11 +27,6 @@ def generate_frontend_data(queries: list[Prompt], user_id: int) -> list[Widget]:
                     widget.generate_kpi_content(data, query.granular_query)
                 case "news":
                     widget.generate_news_content(query.granular_query)
-                case "customer":
-                    user_stock_info = UserCRMInfo(Path(__file__).parent / "../CSV_Users.csv", Path(__file__).parent / "../data.csv")
-                    user_details = user_stock_info.get_user_details(user_id)
-                    widget.generate_customer_content(user_details)
-
             return widget
         except Exception as e:
             print(f"Error processing query {query.granular_query}: {e}")  # Log the error
@@ -42,6 +37,12 @@ def generate_frontend_data(queries: list[Prompt], user_id: int) -> list[Widget]:
 
     # Filter out None values to keep only successful results
     widgets = [widget for widget in results if widget is not None]
+    # add customer widget
+    crm = UserCRMInfo(Path(__file__).parent / "../CSV_Users.csv", Path(__file__).parent / "../data.csv")
+    user_details = crm.get_user_details(user_id)
+    customer_widget = Widget("customer")
+    customer_widget.generate_customer_content(user_details)
+    widgets.append(customer_widget)
     return widgets
 
 
