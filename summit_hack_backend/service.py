@@ -3,6 +3,8 @@ import json
 import pandas as pd
 from config import EXTERNAL_API_URL
 from summit_hack_backend.chat_gpt import ask_chat_gpt
+from prompt_templates.prompt import Prompt
+from summit_hack_backend.crm import UserCRMInfo
 
 
 def get_response(query: str):
@@ -37,35 +39,34 @@ def summary(query: str):
     return response.json()
 
 
-data = get_response("earnings to share ratio of nvidia last quater")
-for message in data['messages']:
-    try:
-        data_dict = json.loads(message['item'])
-        if len(data_dict) > 0:
-            try:
-                for value in data_dict['data']:
-                    print(pd.read_json(value).to_string())
-            except:
-                for key, value in json.loads(data_dict['data']).items():
-                    print(pd.read_json(value).to_string())
-    except Exception as e:
-        print(e)
-
-
 def get_cleaned_queries(prompt: str, userId: int) -> list[Prompt]:
     crm = UserCRMInfo(user_file="../data.csv", stock_file="../CSV_Users.csv")
     user_personal_info = crm.get_user_details(userId)
     user_stock_info = crm.get_user_stocks(userId)
-    assembled_prompt = prompt + user_personal_info + user_stock_info
+    assembled_prompt = prompt + "; User info: " + str(user_personal_info) + "; User stocks: " + str(user_stock_info)
     json_response = ask_chat_gpt(assembled_prompt)
     prompts = extract_queries_from_json(json_response)
     return prompts
 
 
 def extract_queries_from_json(json_string: str) -> list[Prompt]:
-    prompt_list = [Prompt(**item) for item in json.loads(json_string)]
+    prompt_list: list[Prompt]
+
+    last_letter = json_string[-1]
+    if last_letter == ']':
+        prompt_list = [Prompt(**item) for item in json.loads(json_string)]
+    else:
+        # llm response was cut off due to token limit -> trim string to processable format
+        trimmed_prompt = trim_prompts(json_string)
+        prompt_list = [Prompt(**item) for item in json.loads(trimmed_prompt)]
     return prompt_list
 
-prompts = get_cleaned_queries("Why is my protfolio performing bad", 1)
-for prompt in prompts:
-    print()
+def trim_prompts(json_string: str):
+    """
+        trim json string to processable format
+    """
+    last_brace_index = json_string.rfind('}')
+    trimmed = json_string[:last_brace_index + 1]
+    trimmed = trimmed + ']'
+    return trimmed
+
