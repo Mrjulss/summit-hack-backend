@@ -47,7 +47,10 @@ def convert_results(prompt, model="gpt-4"):
 
     response = client.chat.completions.create(
         model=model,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[{"role": "system", "content": "You will receive a prompt asking you to generate json file filled with data."
+                                                "Only return the json file without any additional information or text arount it."},
+                  {"role": "user", "content": prompt}],
+
         temperature=0.2,
         max_tokens=300,
     )
