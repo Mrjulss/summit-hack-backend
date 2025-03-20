@@ -38,11 +38,12 @@ def generate_frontend_data(queries: list[Prompt], user_id: int) -> list[Widget]:
     # Filter out None values to keep only successful results
     widgets = [widget for widget in results if widget is not None]
     # add customer widget
-    crm = UserCRMInfo(Path(__file__).parent / "../CSV_Users.csv", Path(__file__).parent / "../data.csv")
-    user_details = crm.get_user_details(user_id)
-    customer_widget = Widget("customer")
-    customer_widget.generate_customer_content(user_details)
-    widgets.append(customer_widget)
+    if user_id is not None:
+        crm = UserCRMInfo(Path(__file__).parent / "../CSV_Users.csv", Path(__file__).parent / "../data.csv")
+        user_details = crm.get_user_details(user_id)
+        customer_widget = Widget("customer")
+        customer_widget.generate_customer_content(user_details)
+        widgets.append(customer_widget)
     return widgets
 
 

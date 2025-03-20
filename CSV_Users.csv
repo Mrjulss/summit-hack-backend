@@ -1,5 +1,5 @@
 ﻿UserID,UserName,Age,Location,RiskAversion,WealthSource,Profession
-1,Tom Faste,24,Munich,3,Finance Bro,Student
-2,Max Neuss,23,Ismaning,1,Software Start Up,Student
-3,Mike Echarge,78,Washington D.C.,2,Real estate,Cardealer
-4,Lee Wang,München,4,Entrepreneur,Professor
+1,Tom Faste,24,DE,3,Finance Bro,Student
+2,Max Neuss,23,DE,1,Software Start Up,Student
+3,Mike Echarge,78,US,2,Real estate,Cardealer
+4,Lee Wang,CH,4,Entrepreneur,Professor

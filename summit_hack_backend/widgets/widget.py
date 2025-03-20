@@ -29,7 +29,7 @@ class Widget:
 
     def generate_kpi_content(self, data, question):
         prompt = 'Given this pandas DataFrame extract the first row and format it as JSON in the structure: { "type": "kpi", "content": { "title": <title>, "company": <company>, "value": <value>, "unit": <unit> } }.\nExtract suitable data in order to answer the following question:'
-        answer = convert_results(prompt + question + "\n" + data)
+        answer = convert_results(prompt + str(question) + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
         kpi_content = KpiContent(**content)
@@ -37,7 +37,7 @@ class Widget:
 
     def generate_timeseries_content(self, data, question):
         prompt = 'Given this pandas DataFrame, extract the relevant information into a JSON structure suitable for a time series widget. The output should be: { "type": "timeseries", "content": { "title": "<Title>", "data": [ { "timestamps": [<timestamps list>], "values": [<values list>] } ] } }.\nSelect a suitable data and title to answer the following question: '
-        answer = convert_results(prompt + question + "\n" + data)
+        answer = convert_results(prompt + str(question) + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
         time_series_content = TimeseriesContent(**content)
