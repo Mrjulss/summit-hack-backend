@@ -32,10 +32,12 @@ def split_queries(prompt, model="gpt-4"):
                 "widget": "kpi"
                 }
                 ]
+                
+                Do not under any circumstance generate parameters for the query!
         """},
                   {"role": "user", "content": prompt}],
         temperature=0.2,
-        max_tokens=100,
+        max_tokens=250,
     )
 
     return response.choices[0].message.content.strip()
@@ -57,11 +59,12 @@ def convert_results(prompt, model="gpt-4"):
     return response.choices[0].message.content.strip()
 
 
-def ask_chat_gpt_for_news(prompt, model="gpt-4"):
+def ask_chat_gpt_for_news(prompt, model="gpt-4o-search-preview"):
     client = openai.OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
         model=model,
+        web_search_options={},
         messages=[{"role": "system", "content": """
                 You will receive a prompt with a question.
                 Return the most relevant and latest news headlines and the according links as a response. You must follow the json notation in the example below!
@@ -72,10 +75,10 @@ def ask_chat_gpt_for_news(prompt, model="gpt-4"):
                 
                 Sample Response:
                 [{"headline": "<titleOfNews>", "url": "<link>"}, {"headline": "<titleOfNews2>", "url": "<link2>"}, ....]
+                Under no circumstances come up with urls that do not exist in real life! Use websearch to search for possible headlines and URLs!
+                Return a json formated list of dictionaries with the keys "headline" and "url"!
             """},
-                  {"role": "user", "content": prompt}],
-        temperature=0.2,
-        max_tokens=100,
+                  {"role": "user", "content": prompt}]
     )
 
     return response.choices[0].message.content.strip()

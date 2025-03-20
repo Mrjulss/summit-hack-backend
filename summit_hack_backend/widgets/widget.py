@@ -4,7 +4,7 @@ from summit_hack_backend.widgets.customer import CustomerContent
 from summit_hack_backend.widgets.kpi import KpiContent
 from summit_hack_backend.widgets.timeseries import TimeseriesContent
 from summit_hack_backend.widgets.news import NewsContent
-from summit_hack_backend.service import trim_prompts
+import re
 
 
 class Widget:
@@ -14,18 +14,16 @@ class Widget:
 
     def generate_news_content(self, question):
         answer = ask_chat_gpt_for_news(question)
-        last_letter = answer[-1]
+        news_obj = NewsContent([])
 
-        # Trim the answer if it's cut off, otherwise use the original answer
-        if last_letter == ']':
-            data = json.loads(answer)
-        else:
-            # llm response was cut off due to token limit -> trim string to processable format
-            trimmed_answers = trim_prompts(answer)
-            data = json.loads(trimmed_answers)
+        # Regex to capture headlines and URLs
+        pattern = r'- \[(.*?)\]\((.*?)\)'
+        matches = re.findall(pattern, answer)
 
-        # Create and return the NewsContent object
-        self.content = NewsContent(headlines=data)
+        for title, url in matches:
+            news_obj.add_headline(title, url)
+
+        self.content = news_obj
 
     def generate_kpi_content(self, data, question):
         prompt = 'Given this pandas DataFrame extract the first row and format it as JSON in the structure: { "type": "kpi", "content": { "title": <title>, "company": <company>, "value": <value>, "unit": <unit> } }.\nExtract suitable data in order to answer the following question:'
