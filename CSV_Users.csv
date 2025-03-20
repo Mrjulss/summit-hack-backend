@@ -1,4 +1,5 @@
 ﻿UserID,UserName,Age,Location,RiskAversion,WealthSource,Profession
-1,Felix Soehn,24,Munich,3,Finance Bro,Student
-2,Christoph Thees,23,Ismaning,7,Software Start Up,Student
-3,Donald Trump,78,Washington D.C.,2,Real estate,President
+1,Tom Faste,24,Munich,3,Finance Bro,Student
+2,Max Neuss,23,Ismaning,1,Software Start Up,Student
+3,Mike Echarge,78,Washington D.C.,2,Real estate,Cardealer
+4,Lee Wang,München,4,Entrepreneur,Professor

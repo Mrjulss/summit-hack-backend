@@ -1,7 +1,6 @@
 ﻿UserID,Stock,Stock_quant
 1,Apple,3000
 1,Microsoft,5444
-1,Daimler Truck,123
 1,Nvidia,10000
 1,SAP,10213
 2,Nvidia,10000
@@ -9,3 +8,6 @@
 2,Rheinmetall,4589
 2,BMW,4095
 3,Tesla,100000
+4, Nvidia, 1005
+4, Xiaomi, 105000
+4, SAP, 15000
