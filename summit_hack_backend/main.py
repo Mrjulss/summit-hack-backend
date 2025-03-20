@@ -23,6 +23,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
+
 # Include routes
 @app.post("/prompt")
 def prompt(request: PromptRequest):

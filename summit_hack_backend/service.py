@@ -2,7 +2,7 @@ import requests
 import json
 from config import EXTERNAL_API_URL
 from summit_hack_backend.chat_gpt import ask_chat_gpt
-from prompt_templates.prompt import Prompt
+from summit_hack_backend.prompt import Prompt
 from summit_hack_backend.crm import UserCRMInfo
 
 

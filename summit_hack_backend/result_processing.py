@@ -2,10 +2,8 @@ import json
 import pandas as pd
 
 from summit_hack_backend.crm import UserCRMInfo
-from summit_hack_backend.prompt_request import PromptRequest
-from summit_hack_backend.prompt_templates.prompt import Prompt
+from summit_hack_backend.prompt import Prompt
 from summit_hack_backend.service import get_response
-from summit_hack_backend.widgets.customer import CustomerContent
 from summit_hack_backend.widgets.widget import Widget
 
 
