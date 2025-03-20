@@ -1,4 +1,7 @@
+import concurrent
 import json
+from pathlib import Path
+
 import pandas as pd
 
 from summit_hack_backend.crm import UserCRMInfo
@@ -8,27 +11,37 @@ from summit_hack_backend.widgets.widget import Widget
 
 
 def generate_frontend_data(queries: list[Prompt], user_id: int) -> list[Widget]:
-    widgets = []
-    for query in queries:
-        widget = Widget(query.widget)
 
-        match query.widget:
-            case "timeseries":
-                response = get_response(query.granular_query)
-                data = extract_data(response)
-                widget.generate_timeseries_content(data, query.granular_query)
-            case "kpi":
-                response = get_response(query.granular_query)
-                data = extract_data(response)
-                widget.generate_kpi_content(data, query.granular_query)
-            case "news":
-                # generate news content
-                widget.generate_news_content(query.granular_query)
-            case "customer":
-                user_stock_info = UserCRMInfo("../CSV_Users.csv", "../data.csv")
-                user_details = user_stock_info.get_user_details(user_id)
-                widget.generate_customer_content(user_details)
-        widgets.append(widget)
+    def process_query(query: Prompt) -> Widget:
+        try:
+            widget = Widget(query.widget)
+
+            match query.widget:
+                case "timeseries":
+                    response = get_response(query.granular_query)
+                    data = extract_data(response)
+                    widget.generate_timeseries_content(data, query.granular_query)
+                case "kpi":
+                    response = get_response(query.granular_query)
+                    data = extract_data(response)
+                    widget.generate_kpi_content(data, query.granular_query)
+                case "news":
+                    widget.generate_news_content(query.granular_query)
+                case "customer":
+                    user_stock_info = UserCRMInfo(Path(__file__).parent / "../CSV_Users.csv", Path(__file__).parent / "../data.csv")
+                    user_details = user_stock_info.get_user_details(user_id)
+                    widget.generate_customer_content(user_details)
+
+            return widget
+        except Exception as e:
+            print(f"Error processing query {query.granular_query}: {e}")  # Log the error
+            return None  # Return None if an error occurs
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = list(executor.map(process_query, queries))
+
+    # Filter out None values to keep only successful results
+    widgets = [widget for widget in results if widget is not None]
     return widgets
 
 

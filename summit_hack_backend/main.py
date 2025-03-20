@@ -24,8 +24,8 @@ app.add_middleware(
 # Include routes
 @app.post("/prompt")
 def prompt(request: PromptRequest):
-    six_queries = get_cleaned_queries(request.query, 3)
-    widgets = generate_frontend_data(six_queries, 3)
+    six_queries = get_cleaned_queries(request.query, 1)
+    widgets = generate_frontend_data(six_queries, 1)
     return widgets
 
 
