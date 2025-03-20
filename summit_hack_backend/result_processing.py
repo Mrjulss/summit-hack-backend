@@ -22,7 +22,8 @@ def generate_frontend_data(queries: list[Prompt], user_id: int) -> list[Widget]:
                 data = extract_data(response)
                 widget.generate_kpi_content(data, query.granular_query)
             case "news":
-                widget.generate_news_content("", query.granular_query)
+                # generate news content
+                widget.generate_news_content(query.granular_query)
             case "customer":
                 user_stock_info = UserCRMInfo("../CSV_Users.csv", "../data.csv")
                 user_details = user_stock_info.get_user_details(user_id)

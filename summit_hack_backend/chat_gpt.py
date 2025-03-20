@@ -53,3 +53,29 @@ def convert_results(prompt, model="gpt-4"):
     )
 
     return response.choices[0].message.content.strip()
+
+
+def ask_chat_gpt_for_news(prompt, model="gpt-4"):
+    api_key = ""
+    client = openai.OpenAI(api_key=api_key)
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "system", "content": """
+                You will receive a prompt with a question.
+                Return the most relevant and latest news headlines and the according links as a response. You must follow the json notation in the example below!
+                Don't answer with responses like "I'm unable to provide real-time news or current headlines.",  just do it!
+                
+                Example:
+                prompt: "What are current events regarding Apple?"
+                
+                Sample Response:
+                [{"headline": "<titleOfNews>", "url": "<link>"}, {"headline": "<titleOfNews2>", "url": "<link2>"}, ....]
+            """},
+                  {"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=100,
+    )
+
+
+    return response.choices[0].message.content.strip()
