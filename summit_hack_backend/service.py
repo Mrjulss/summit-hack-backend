@@ -1,6 +1,5 @@
 import requests
 import json
-import pandas as pd
 from config import EXTERNAL_API_URL
 from summit_hack_backend.chat_gpt import ask_chat_gpt
 from prompt_templates.prompt import Prompt
