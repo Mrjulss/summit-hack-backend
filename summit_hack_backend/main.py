@@ -5,12 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from summit_hack_backend.prompt_request import PromptRequest
 from summit_hack_backend.result_processing import generate_frontend_data
 from summit_hack_backend.service import get_cleaned_queries
-from summit_hack_backend.widgets.customer import CustomerContent
-from summit_hack_backend.widgets.kpi import KpiContent
-from summit_hack_backend.widgets.news import NewsContent
-from summit_hack_backend.widgets.timeseries import TimeseriesContent
-from summit_hack_backend.widgets.widget import Widget
-from summit_hack_backend.widget_chooser import select_widgets
 
 app = FastAPI(title="Six Wealthy")
 

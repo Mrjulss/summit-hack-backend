@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 
 
@@ -23,12 +25,3 @@ class UserCRMInfo:
         if user.empty:
             return f"User with name {user_name} not found."
         return user['UserID'].values[0]
-
-
-user_stock_info = UserCRMInfo("../CSV_Users.csv", "../data.csv")
-
-user_name = "Christoph Thees"
-user_id = user_stock_info.get_user_id(user_name)
-
-print("User Details:", user_stock_info.get_user_details(user_id))
-print("User Stocks:", user_stock_info.get_user_stocks(user_id))

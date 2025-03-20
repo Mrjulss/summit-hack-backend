@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import requests
 import json
-from config import EXTERNAL_API_URL
-from summit_hack_backend.chat_gpt import ask_chat_gpt
+from summit_hack_backend.config import EXTERNAL_API_URL
+from summit_hack_backend.chat_gpt import split_queries
 from summit_hack_backend.prompt import Prompt
 from summit_hack_backend.crm import UserCRMInfo
 
@@ -39,11 +41,11 @@ def summary(query: str):
 
 
 def get_cleaned_queries(prompt: str, userId: int) -> list[Prompt]:
-    crm = UserCRMInfo(user_file="../data.csv", stock_file="../CSV_Users.csv")
+    crm = UserCRMInfo(Path(__file__).parent/"../CSV_Users.csv", Path(__file__).parent/"../data.csv")
     user_personal_info = crm.get_user_details(userId)
     user_stock_info = crm.get_user_stocks(userId)
     assembled_prompt = prompt + "; User info: " + str(user_personal_info) + "; User stocks: " + str(user_stock_info)
-    json_response = ask_chat_gpt(assembled_prompt)
+    json_response = split_queries(assembled_prompt)
     prompts = extract_queries_from_json(json_response)
     return prompts
 

@@ -1,7 +1,5 @@
 import json
-from pydantic_core.core_schema import none_schema
-
-from summit_hack_backend.chat_gpt import ask_chat_gpt
+from summit_hack_backend.chat_gpt import convert_results
 from summit_hack_backend.widgets.customer import CustomerContent
 from summit_hack_backend.widgets.kpi import KpiContent
 from summit_hack_backend.widgets.timeseries import TimeseriesContent
@@ -18,7 +16,7 @@ class Widget:
 
     def generate_kpi_content(self, data, question):
         prompt = 'Given this pandas DataFrame extract the first row and format it as JSON in the structure: { "type": "kpi", "content": { "title": <title>, "company": <company>, "value": <value>, "unit": <unit> } }.\nExtract suitable data in order to answer the following question:'
-        answer = ask_chat_gpt(prompt + question + "\n" + data.to_string())
+        answer = convert_results(prompt + question + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
         kpi_content = [KpiContent(**item) for item in content["data"]]
@@ -27,7 +25,7 @@ class Widget:
 
     def generate_timeseries_content(self, data, question):
         prompt = 'Given this pandas DataFrame, extract the relevant information into a JSON structure suitable for a time series widget. The output should be: { "type": "timeseries", "content": { "title": "<Title>", "data": [ { "timestamps": [<timestamps list>], "values": [<values list>] } ] } }.\nSelect a suitable data and title to answer the following question: '
-        answer = ask_chat_gpt(prompt + question + "\n" + data.to_string())
+        answer = convert_results(prompt + question + "\n" + data)
         data = json.loads(answer)
         content = data["content"]
         time_series_content = [TimeseriesContent(**item) for item in content["data"]]

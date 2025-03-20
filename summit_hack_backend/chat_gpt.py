@@ -1,8 +1,8 @@
 import openai
 
+api_key = ""
 
-def ask_chat_gpt(prompt, model="gpt-4"):
-    api_key = ""
+def split_queries(prompt, model="gpt-4"):
     client = openai.OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
@@ -37,6 +37,19 @@ def ask_chat_gpt(prompt, model="gpt-4"):
                   {"role": "user", "content": prompt}],
         temperature=0.2,
         max_tokens=100,
+    )
+
+    return response.choices[0].message.content.strip()
+
+
+def convert_results(prompt, model="gpt-4"):
+    client = openai.OpenAI(api_key=api_key)
+
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.2,
+        max_tokens=300,
     )
 
     return response.choices[0].message.content.strip()
