@@ -25,3 +25,9 @@ class UserCRMInfo:
         if user.empty:
             return f"User with name {user_name} not found."
         return user['UserID'].values[0]
+
+    def get_users_from_csv(self):
+        users_names = self.users["UserName"].tolist()
+        user_ids = self.users["UserID"].tolist()
+        merged_list = [{"id": id_, "name": name} for id_, name in zip(user_ids, users_names)]
+        return merged_list
